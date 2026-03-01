@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/accordion';
 import { getAnalyses, deleteAnalysis, type AnalysisRecord } from '@/lib/db';
 import { format } from 'date-fns';
+import { AudioPlayer } from './AudioPlayer';
 
 interface AnalysisHistoryProps {
   refreshTrigger: number;
@@ -75,16 +76,16 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
   // Parse scores from analysis text if available
   const parseScores = (analysis: string) => {
     const scores: { accuracy?: number; fluency?: number; completeness?: number; prosody?: number; overall?: number } = {};
-    
+
     // Try to find JSON in analysis
     const jsonMatch = analysis.match(/\{[\s\S]*?"scores"[\s\S]*?\}/);
     if (jsonMatch) {
       try {
         const parsed = JSON.parse(jsonMatch[0]);
         if (parsed.scores) return parsed.scores;
-      } catch {}
+      } catch { }
     }
-    
+
     return null;
   };
 
@@ -140,7 +141,7 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
           <Accordion type="single" collapsible className="px-4 pb-4">
             {analyses.map((record, index) => {
               const scores = parseScores(record.analysis);
-              
+
               return (
                 <AccordionItem key={record.id} value={`item-${record.id}`} className="border rounded-lg mb-2 bg-muted/30 px-0">
                   <AccordionTrigger className="px-4 py-3 hover:no-underline">
@@ -172,6 +173,17 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
                   </AccordionTrigger>
                   <AccordionContent className="px-4 pb-4">
                     <div className="space-y-4">
+                      {/* Audio Player for the recorded voice */}
+                      {record.audioBlob && (
+                        <div className="space-y-2">
+                          <p className="text-xs font-medium text-muted-foreground flex items-center gap-1">
+                            <Mic2 className="h-3 w-3" />
+                            Sizning ovozingiz:
+                          </p>
+                          <AudioPlayer src={URL.createObjectURL(record.audioBlob)} />
+                        </div>
+                      )}
+
                       {/* Transcript */}
                       {record.transcript && (
                         <div className="p-3 bg-background rounded-lg border">
@@ -198,7 +210,7 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
                             </div>
                             <Progress value={scores.accuracy || 0} className="h-2" />
                           </div>
-                          
+
                           <div className="p-3 bg-background rounded-lg border space-y-2">
                             <div className="flex items-center gap-2">
                               <Waves className="h-4 w-4 text-secondary" />
@@ -209,7 +221,7 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
                             </div>
                             <Progress value={scores.fluency || 0} className="h-2" />
                           </div>
-                          
+
                           <div className="p-3 bg-background rounded-lg border space-y-2">
                             <div className="flex items-center gap-2">
                               <FileCheck className="h-4 w-4 text-accent" />
@@ -220,7 +232,7 @@ export function AnalysisHistory({ refreshTrigger }: AnalysisHistoryProps) {
                             </div>
                             <Progress value={scores.completeness || 0} className="h-2" />
                           </div>
-                          
+
                           <div className="p-3 bg-background rounded-lg border space-y-2">
                             <div className="flex items-center gap-2">
                               <Music className="h-4 w-4 text-info" />

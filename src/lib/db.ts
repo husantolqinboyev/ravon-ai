@@ -19,6 +19,7 @@ export interface AnalysisRecord {
   analysis: string;
   transcript?: string;
   duration: number;
+  audioBlob?: Blob; // Local storage for the recorded audio
   createdAt: Date;
 }
 
@@ -60,12 +61,14 @@ export async function saveAnalysis(params: {
   transcript?: string;
   duration: number;
   createdAt: Date;
+  audioBlob?: Blob;
   telegramUserId?: string;
 }) {
   const record: AnalysisRecord = {
     analysis: params.analysis,
     transcript: params.transcript,
     duration: params.duration,
+    audioBlob: params.audioBlob,
     createdAt: params.createdAt,
     telegramUserId: params.telegramUserId,
   };

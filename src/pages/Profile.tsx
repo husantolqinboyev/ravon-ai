@@ -57,10 +57,10 @@ const Profile = () => {
   const totalDuration = analyses.reduce((sum, a) => sum + (a.duration || 0), 0);
   const avgDuration = totalTests > 0 ? Math.round(totalDuration / totalTests) : 0;
 
-  // Daily limit
+  // Daily limit - getting from backend stats or default to 3
   const today = new Date().toDateString();
+  const dailyLimit = userStats?.daily_limit || (isPremium ? 50 : 3);
   const todayTests = analyses.filter(a => new Date(a.createdAt).toDateString() === today).length;
-  const dailyLimit = isPremium ? 50 : 3;
   const remainingTests = Math.max(0, dailyLimit - todayTests);
 
   // Average score from user stats or calculate from analyses

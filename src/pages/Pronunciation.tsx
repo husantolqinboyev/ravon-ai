@@ -94,6 +94,7 @@ const Pronunciation = () => {
         analysis: result.text,
         transcript: result.data?.transcription,
         duration,
+        audioBlob, // Save the audio blob locally
         createdAt: new Date(),
         telegramUserId: user?.telegramUserId,
       });

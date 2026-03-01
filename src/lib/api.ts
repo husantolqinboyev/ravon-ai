@@ -1,4 +1,11 @@
-const API_BASE_URL = (import.meta as any).env.VITE_API_URL || '';
+const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'https://ravon-ai-bot-7xh1.onrender.com';
+
+export const fetchWithoutAuth = async (url: string, options: RequestInit = {}) => {
+    const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'https://ravon-ai-bot-7xh1.onrender.com';
+    const absoluteUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+    
+    return fetch(absoluteUrl, options);
+};
 
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     const tg = (window as any).Telegram?.WebApp;
@@ -31,7 +38,10 @@ export const api = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),
     }),
-    getTestWords: (type: string = 'word') => fetchWithAuth(`/api/test-words?type=${type}`),
+    getTestWords: (type: string = 'word', limit?: number) => {
+        const url = limit ? `/api/test-words?type=${type}&limit=${limit}` : `/api/test-words?type=${type}`;
+        return fetchWithoutAuth(url); // test-words endpoint autentifikatsiyasiz ishlaydi
+    },
     getRandomWord: (type: string = 'word') => fetchWithAuth(`/api/random-word?type=${type}`),
     getLeaderboard: () => fetchWithAuth('/api/leaderboard'),
     getUserAssessments: () => fetchWithAuth('/api/assessments'),

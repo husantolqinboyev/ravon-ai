@@ -152,9 +152,8 @@ const Premium = () => {
                         </div>
                       ))
                     ) : (
-                      <div className="flex items-center gap-2 text-sm">
-                        <Check className="h-4 w-4 text-green-500" />
-                        <span>Cheksiz testlar</span>
+                      <div className="text-sm text-muted-foreground">
+                        Tarif xususiyatlari ko'rsatilmagan
                       </div>
                     )}
                   </div>

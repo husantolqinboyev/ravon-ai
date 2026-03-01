@@ -38,10 +38,46 @@ export function MaterialSelector({ telegramUserId, onSelect, selectedContent }: 
     try {
       setIsLoading(true);
 
-      const response = await api.getMaterials();
-      if (response.ok) {
-        const data = await response.json();
-        setMaterials(data.public || []);
+      const [materialsRes, wordsRes, textsRes] = await Promise.all([
+        api.getMaterials(),
+        api.getTestWords('word', 30),
+        api.getTestWords('text', 20)
+      ]);
+
+      if (materialsRes.ok) {
+        const data = await materialsRes.json();
+        const publicMats = data.public || [];
+
+        // If library is empty, use words and texts from getRecentTestWordsByType API
+        if (publicMats.length === 0) {
+          const fallbackMaterials = [];
+          
+          if (wordsRes.ok) {
+            const words = await wordsRes.json();
+            fallbackMaterials.push(...words.map((w: any) => ({
+              id: `word-${w.id}`,
+              type: 'word',
+              content: w.word || w.content,
+              translation: w.translation || null,
+              is_public: true
+            })));
+          }
+          
+          if (textsRes.ok) {
+            const texts = await textsRes.json();
+            fallbackMaterials.push(...texts.map((t: any) => ({
+              id: `text-${t.id}`,
+              type: 'text',
+              content: t.word || t.content,
+              translation: t.translation || null,
+              is_public: true
+            })));
+          }
+          
+          setMaterials(fallbackMaterials);
+        } else {
+          setMaterials(publicMats);
+        }
 
         // Assigned materials come from student tasks
         const assigned = (data.assigned || []).map((task: any) => ({

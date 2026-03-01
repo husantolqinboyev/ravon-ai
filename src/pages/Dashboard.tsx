@@ -13,51 +13,44 @@ const Dashboard = () => {
   const menuItems = [
     {
       icon: Mic,
-      label: '🎙 Talaffuzni tekshirish',
+      label: 'Talaffuzni tekshirish',
       description: 'Ingliz talaffuzini tekshiring',
-      emoji: '🎙',
       path: '/pronunciation'
     },
     {
       icon: Volume2,
-      label: '🔊 Matnni ovozga aylantirish',
+      label: 'Matnni ovozga aylantirish',
       description: 'Matnni audiga aylantiring',
-      emoji: '🔊',
       path: '/tts'
     },
     {
       icon: User,
-      label: '👤 Profil va Natijalar',
+      label: 'Profil va Natijalar',
       description: 'Shaxsiy statistika va reyting',
-      emoji: '👤',
       path: '/profile'
     },
     {
       icon: BarChart3,
-      label: '📊 Umumiy Statistika',
+      label: 'Umumiy Statistika',
       description: 'Botdan foydalanish ko\'rsatkichlari',
-      emoji: '📊',
       path: '/stats'
     },
     {
       icon: CreditCard,
-      label: '💳 Tariflar | Premium',
+      label: 'Tariflar | Premium',
       description: 'Cheksiz imkoniyatlarga ega bo\'ling',
-      emoji: '💳',
       path: '/premium'
     },
     {
       icon: Users2,
-      label: '🎁 Bepul limit olish',
+      label: 'Bepul limit olish',
       description: 'Do\'stlarni taklif qiling',
-      emoji: '🎁',
       path: '/referral'
     },
     {
       icon: HelpCircle,
-      label: '❓ Bot qanday ishlaydi?',
+      label: 'Bot qanday ishlaydi?',
       description: 'Qo\'llanma va yordam',
-      emoji: '❓',
       path: '/help'
     }
   ];
@@ -90,7 +83,7 @@ const Dashboard = () => {
               <CardContent className="p-6">
                 <div className="flex items-center gap-5">
                   <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors duration-300">
-                    <span className="text-3xl">{item.emoji}</span>
+                    <item.icon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-foreground text-lg group-hover:text-primary transition-colors">
@@ -100,7 +93,7 @@ const Dashboard = () => {
                       {item.description}
                     </p>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 opacity-50 group-hover:opacity-100">
                     <item.icon className="h-4 w-4" />
                   </div>
                 </div>

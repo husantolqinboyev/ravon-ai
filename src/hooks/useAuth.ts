@@ -16,14 +16,18 @@ export function useAuth(): UseAuthReturn {
   const fetchUserData = useCallback(async (initData: string) => {
     try {
       const API_BASE_URL = (import.meta as any).env.VITE_API_URL || '';
+      console.log('Fetching user data from:', `${API_BASE_URL}/api/user-data`);
+
       const response = await fetch(`${API_BASE_URL}/api/user-data`, {
         headers: {
-          'x-telegram-init-data': initData
+          'x-telegram-init-data': initData,
+          'Content-Type': 'application/json'
         }
       });
 
       if (response.ok) {
         const result = await response.json();
+        console.log('Auth success:', result.user.telegram_id);
         const session: UserSession = {
           telegramUserId: result.user.telegram_id.toString(),
           username: result.user.username,
@@ -36,6 +40,7 @@ export function useAuth(): UseAuthReturn {
         await saveSession(session);
         return true;
       }
+      console.error('Auth failed with status:', response.status);
       return false;
     } catch (error) {
       console.error('Fetch user data error:', error);

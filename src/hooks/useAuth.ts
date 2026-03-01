@@ -15,7 +15,8 @@ export function useAuth(): UseAuthReturn {
 
   const fetchUserData = useCallback(async (initData: string) => {
     try {
-      const response = await fetch('/api/user-data', {
+      const API_BASE_URL = (import.meta as any).env.VITE_API_URL || '';
+      const response = await fetch(`${API_BASE_URL}/api/user-data`, {
         headers: {
           'x-telegram-init-data': initData
         }
